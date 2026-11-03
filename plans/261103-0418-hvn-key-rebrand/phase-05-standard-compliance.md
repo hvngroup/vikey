@@ -10,7 +10,7 @@ Repo và app đạt các mục "Mặc định của nhà" trong `ab-macos-native
 |---|---|---|
 | XcodeGen, `.xcodeproj` không commit | Đã đúng | Giữ |
 | macOS 13+ | Đã đúng | Giữ |
-| `ARCHS: arm64` | Upstream build universal | Theo câu hỏi mở 2 |
+| `ARCHS: arm64` | Upstream build universal | Đặt `ARCHS: arm64` trong `project.yml` (đã chốt: chỉ chip Apple) |
 | Bundle `vn.hvn.<app>` | `com.devuap.vikey` | Phase 3 |
 | Chuỗi giao diện tiếng Anh, bản dịch Việt trong `App/Localizable.xcstrings`, **tiếng Việt mặc định** | Chuỗi tiếng Việt viết thẳng trong code, không có String Catalog | Chuyển sang String Catalog (mục 1 bên dưới) |
 | `Shared/` cho logic thuần + XCTest | Logic engine ở `Engine/`, test bằng `Tools/autoswitch` | Giữ `Engine/` (tương đương `Shared/`), ghi lý do vào `docs/development.md`. Test hiện có mạnh hơn yêu cầu |
@@ -31,12 +31,13 @@ Repo và app đạt các mục "Mặc định của nhà" trong `ab-macos-native
 2. `CHANGELOG.md` gồm mục `[Unreleased]` và `[1.0.0]`: "Phát hành đầu tiên của HVN Key, dựa trên Vikey 1.0.31". Không
    ghi tên khách hàng hay link private (CHANGELOG là thông tin Công khai).
 3. `docs/user-guide.md`: cài đặt, cấp quyền Accessibility và Apple Events, cách gõ, auto-switch, phím tắt, cập nhật, gỡ
-   cài đặt, báo lỗi. Nếu ký ad-hoc thì thêm hướng dẫn **Open Anyway**.
+   cài đặt, báo lỗi. Ghi rõ app chỉ chạy trên Mac chip Apple. Bản đã ký Developer ID và notarize nên không cần
+   hướng dẫn **Open Anyway**, trừ bản build thử từ PR (vẫn ký ad-hoc khi CI chưa có chứng chỉ).
 4. `docs/development.md`: build bằng XcodeGen, chạy `Tools/autoswitch/check.sh`, cấu trúc repo, quy trình merge
    upstream (Phase 1), lý do giữ `Engine/`.
 5. `docs/release.md`: quy trình phát hành theo `ab-app-release`.
 6. `SECURITY.md`, issue templates (báo lỗi có mục phím đã gõ / chữ hiện ra / chữ mong muốn và crash log), Dependabot
-   cho GitHub Actions và Swift Package (Sparkle). Placeholder `{{RELEASES_REPO}}` = `hvngroup/universal_hvn_key-releases`.
+   cho GitHub Actions và Swift Package (Sparkle). Placeholder `{{RELEASES_REPO}}` = `hvngroup/app-hvn-key-releases`.
 7. `README.md` viết lại. Chuyển `CONTRIBUTING.md`, `TRIAGE.md` và `.coderabbit.yaml` sang ngữ cảnh HVN hoặc ghi rõ
    chúng thuộc upstream.
 

@@ -2,8 +2,9 @@
 
 ## Cổng ③ — checklist trên Mac thật (chủ sản phẩm chạy, agent không tự đánh dấu)
 
-Dùng artifact của commit cuối PR. Chạy trên Mac chip Apple, macOS 13 trở lên. Nếu còn hỗ trợ Intel thì chạy thêm một
-máy Intel.
+Dùng artifact của commit cuối PR. Chạy trên Mac chip Apple, macOS 13 trở lên (app chỉ build arm64).
+
+- [ ] Mở DMG không bị Gatekeeper chặn (đã ký Developer ID và notarize).
 
 - [ ] Mở DMG, kéo vào Applications. App tên "HVN Key", icon nền đỏ HVN.
 - [ ] Onboarding hướng dẫn cấp quyền Accessibility. Sau khi cấp, gõ được tiếng Việt.
@@ -24,18 +25,18 @@ máy Intel.
 2. Merge vào `main`.
 3. Chủ sản phẩm tạo Release `v1.0.0` trên GitHub UI của repo mã nguồn, target `main`, để trống mô tả. Đây là bước
    ASK FIRST, agent không tạo tag.
-4. Workflow của tag xanh. Release `v1.0.0` ở `universal_hvn_key-releases` có DMG, ZIP, SHA-256, `appcast.xml`,
+4. Workflow của tag xanh. Release `v1.0.0` ở `app-hvn-key-releases` có DMG, ZIP, SHA-256, `appcast.xml`,
    `HVNKey-1.0.0-source.tar.gz`, và release notes lấy từ CHANGELOG.
 5. Agent tải file, chạy `sha256sum -c`, rồi đọc `Info.plist` trong ZIP để kiểm đúng `1.0.0 (1)` và
-   `vn.hvn.hvnkey`. Agent cũng giải nén gói source và đối chiếu commit.
+   `vn.hvn.vnkey`. Agent cũng giải nén gói source và đối chiếu commit.
 6. Chủ sản phẩm mở cửa sổ ẩn danh: tải được `releases/latest/download/appcast.xml`, còn repo mã nguồn trả 404.
 
 ## Thử cập nhật thật (sau 1.0.0, trước khi thông báo rộng)
 
 - Phát hành 1.0.1 (thay đổi nhỏ). Trên máy đang chạy 1.0.0, bấm "Kiểm tra cập nhật" → cài → khởi động lại.
 - [ ] Lên 1.0.1 thành công.
-- [ ] **Quyền Accessibility vẫn còn sau cập nhật.** Nếu mất thì đây là bằng chứng phải chuyển sang Developer ID (câu
-      hỏi mở 1).
+- [ ] **Quyền Accessibility vẫn còn sau cập nhật.** Nếu mất, kiểm lại chữ ký của hai bản (`codesign -dr -`): designated
+      requirement phải giống nhau.
 
 ## Sau phát hành
 

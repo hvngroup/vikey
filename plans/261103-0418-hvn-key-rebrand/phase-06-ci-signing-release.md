@@ -14,7 +14,7 @@ cho GPL.
   1. `brew install xcodegen create-dmg` → `xcodegen generate`.
   2. Kiểm phiên bản: trên tag, `MARKETING_VERSION` phải bằng tag và CHANGELOG phải có mục `## [X.Y.Z]`. Lệch thì dừng.
   3. `xcodebuild` Release, rồi ký (xem mục ký số).
-  4. **Verify bundle:** `CFBundleIdentifier = vn.hvn.hvnkey`, `CFBundleDisplayName = HVN Key`, có
+  4. **Verify bundle:** `CFBundleIdentifier = vn.hvn.vnkey`, `CFBundleDisplayName = HVN Key`, có
      `Sparkle.framework`, `vi.lproj`, `AppIcon`, kiến trúc đúng (`lipo -archs`), `codesign --verify --deep --strict`.
      Thêm kiểm "không còn `vikey.app`": `! grep -r "vikey.app" "HVN Key.app/Contents/Info.plist"`.
   5. Đổi tên thành `HVN Key.app`, rồi tạo `HVNKey.dmg` (có lối tắt Applications) và `HVNKey.zip` (cho Sparkle), kèm
@@ -25,18 +25,27 @@ cho GPL.
   2. `scripts/make-appcast.sh` ký EdDSA bằng secret `SPARKLE_PRIVATE_KEY`.
   3. `git archive --format=tar.gz --prefix=HVNKey-X.Y.Z/ $GITHUB_SHA > HVNKey-X.Y.Z-source.tar.gz` là **gói mã nguồn
      GPL**. Kèm `LICENSE`.
-  4. `gh release create vX.Y.Z -R hvngroup/universal_hvn_key-releases` với `GH_TOKEN: ${{ secrets.RELEASES_TOKEN }}`,
+  4. `gh release create vX.Y.Z -R hvngroup/app-hvn-key-releases` với `GH_TOKEN: ${{ secrets.RELEASES_TOKEN }}`,
      đính kèm DMG, ZIP, SHA-256, `appcast.xml` và gói source.
 
-## Ký số (theo câu hỏi mở 1)
+## Ký số: Developer ID + notarize (đã chốt 03/11/2026)
 
-| Phương án | Cấu hình | Hệ quả |
-|---|---|---|
-| **Developer ID + notarize (đề xuất)** | `ENABLE_HARDENED_RUNTIME: YES`, `CODE_SIGN_IDENTITY: "Developer ID Application"`, team `TVZNQ5W8NG`. Secrets: `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`, khoá API notarize | Người dùng mở app bình thường. Quyền Accessibility được giữ qua các bản cập nhật vì chữ ký ổn định |
-| Ad-hoc (mặc định của chuẩn) | `CODE_SIGN_IDENTITY: "-"`, tắt hardened runtime | Gatekeeper chặn lần đầu (hướng dẫn Open Anyway). Có rủi ro phải cấp lại quyền Accessibility sau mỗi lần cập nhật |
+Lý do chọn khác mặc định ad-hoc của chuẩn: app phụ thuộc quyền Accessibility. Chữ ký Developer ID ổn định giữa các bản
+build, nên quyền đã cấp được giữ qua các lần cập nhật. Người dùng cũng mở app bình thường, không bị Gatekeeper chặn.
 
-Workflow viết sao cho thiếu chứng chỉ thì tự lùi về ký ad-hoc (mẫu của `signing-distribution.md`). Nhờ vậy CI vẫn xanh
-trong lúc chờ chứng chỉ.
+- Cấu hình: `ENABLE_HARDENED_RUNTIME: YES`, `CODE_SIGN_IDENTITY: "Developer ID Application"`,
+  `DEVELOPMENT_TEAM: TVZNQ5W8NG`, entitlement `com.apple.security.automation.apple-events` giữ nguyên.
+- Chủ sản phẩm (Account Holder của team `TVZNQ5W8NG`) tạo chứng chỉ "Developer ID Application" và khoá API App Store
+  Connect cho notarize, theo `ab-app-release/references/signing-distribution.md`. Lưu vào secrets
+  `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD` và các secret khoá notarize. Tất cả phân loại Tuyệt mật.
+- Thứ tự ký theo cách upstream đã chạy được: ký các helper của Sparkle từ trong ra ngoài (không dùng `--deep`), rồi ký
+  framework, rồi ký app kèm entitlements, rồi `notarytool submit --wait` và `stapler staple` cho app và DMG.
+- Workflow viết sao cho thiếu chứng chỉ thì tự lùi về ký ad-hoc (mẫu của `signing-distribution.md`). Nhờ vậy CI của PR
+  vẫn xanh trong lúc chờ chứng chỉ. Job `publish` trên tag thì **bắt buộc** có chứng chỉ, thiếu là dừng.
+
+## Kiến trúc: chỉ arm64 (đã chốt)
+
+`ARCHS: arm64` trong `project.yml`. Bước Verify kiểm `lipo -archs` trả đúng `arm64`.
 
 ## Sparkle
 

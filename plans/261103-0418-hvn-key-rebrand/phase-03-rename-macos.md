@@ -9,7 +9,7 @@ merge upstream dễ.
 
 | Nhóm | File / mục | Đổi |
 |---|---|---|
-| Dự án | `project.yml` | `name: HVNKey`, target `HVNKey`, `PRODUCT_NAME: HVNKey`, `PRODUCT_BUNDLE_IDENTIFIER: vn.hvn.hvnkey`, `MARKETING_VERSION: "1.0.0"`, `CURRENT_PROJECT_VERSION: "1"`, đường dẫn entitlements và bridging header |
+| Dự án | `project.yml` | `name: HVNKey`, target `HVNKey`, `PRODUCT_NAME: HVNKey`, `PRODUCT_BUNDLE_IDENTIFIER: vn.hvn.vnkey`, `MARKETING_VERSION: "1.0.0"`, `CURRENT_PROJECT_VERSION: "1"`, đường dẫn entitlements và bridging header |
 | Đổi tên file | `App/VikeyApp.swift` → `App/HVNKeyApp.swift`; `App/Vikey.entitlements` → `App/HVNKey.entitlements`; `App/Core/Vikey-Bridging-Header.h` → `App/Core/HVNKey-Bridging-Header.h`; `App/Core/VikeyCore.{h,mm}` → `App/Core/HVNKeyCore.{h,mm}` | Dùng `git mv` để giữ lịch sử |
 | Ký hiệu Swift/ObjC | `struct VikeyApp`, lớp `VikeyCore` và các chỗ gọi trong `App/` | Đổi theo tên file |
 | Info.plist | `CFBundleDisplayName`/`CFBundleName` = "HVN Key"; mô tả quyền (`NSAppleEventsUsageDescription`...) đổi "Vikey" thành "HVN Key"; `NSHumanReadableCopyright` = "© 2026 HVN GROUP. Dựa trên Vikey © Tony Dinh và OpenKey © Tuyen Mai (GPL-3.0)" |
@@ -30,7 +30,7 @@ merge upstream dễ.
 
 - CI `Engine rules` (job `check` + `app`) xanh, và golden snapshot không đổi.
 - `git grep -n -i vikey -- App project.yml` chỉ còn dòng ghi công.
-- Trong artifact build có `Contents/Info.plist`, với `CFBundleIdentifier = vn.hvn.hvnkey`.
+- Trong artifact build có `Contents/Info.plist`, với `CFBundleIdentifier = vn.hvn.vnkey`.
 
 ## Rủi ro
 

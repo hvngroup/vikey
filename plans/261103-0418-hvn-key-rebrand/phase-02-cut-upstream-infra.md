@@ -23,7 +23,7 @@ này phải xong **trước** mọi bản build đưa cho người dùng.
    `ab-macos-native/assets/AppUpdater.swift`, Sparkle chỉ bật khi có khoá, nên không có khoá thì updater tắt.
 2. `CrashReporter.swift`: tắt gửi mạng mặc định khi chưa có endpoint của HVN. Vẫn giữ lưu crash log cục bộ để người
    dùng đính kèm vào Issue.
-3. Link feedback trong app trỏ về `https://github.com/hvngroup/universal_hvn_key-releases/issues/new/choose`.
+3. Link feedback trong app trỏ về `https://github.com/hvngroup/app-hvn-key-releases/issues/new/choose`.
 4. `project.yml`: `DEVELOPMENT_TEAM: TVZNQ5W8NG`, `bundleIdPrefix: vn.hvn`. Cách ký số chốt ở Phase 6.
 5. Bỏ nhánh macOS của `Tools/release/release.sh`, thay bằng CI (Phase 6). Giữ các lane `--windows/--linux/--android`
    cho đợt 2, nhưng chặn bằng một dòng báo "chưa chuyển sang HVN Key".
